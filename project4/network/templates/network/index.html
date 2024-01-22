@@ -1,0 +1,76 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<style>
+    .card-custom {
+        height: 350px;
+    }
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="py-1"><b>Home Page</b></h1>
+            {% if user.is_authenticated %} 
+            {% else %}
+            <h8 class="">Please sign in / register to enable features of the website</h8>   
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-auto">
+                <div class="card card-custom text-center border-secondary mb-3" style="width: 20rem;" >
+                    <img src="https://static.mothership.sg/1/2014/07/ippt-mindef.jpg" class="card-img-top" alt="IPPT image">
+                    <div class="card-body">
+                    <h5 class="card-title">IPPT Score Calculator</h5>
+                    <p class="card-text">Calculate you IPPT Score based on your age group and check your final grade.<p>
+                    {% if user.is_authenticated %}
+                    <a href="Ippt" class="btn btn-secondary">Access eService</a>
+                    {% else %}
+                    <a href="login" class="btn btn-secondary">Access eService</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-md-auto">
+                <div class="card card-custom text-center border-secondary mb-3" style="width: 20rem;" >
+                    <img src="https://competitionandmarkets.blog.gov.uk/wp-content/uploads/sites/149/2019/02/Holiday-websites-hand.fw_-620x310.png" class="card-img-top" alt="IPPT image">
+                    <div class="card-body">
+                    <h5 class="card-title">IPPT Bookings</h5>
+                    <p class="card-text">Keep track and view your past IPPT bookings here.</p>
+                    {% if user.is_authenticated %}
+                    <a href="bookings" class="btn btn-secondary">Access eService</a>
+                    {% else %}
+                    <a href="login" class="btn btn-secondary">Access eService</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-auto">
+                <div class="card card-custom text-center border-secondary mb-3" style="width: 20rem;" >
+                    <img src="https://www.medexpress.pl/uploads/2013/10/fatso-620x310.jpg" class="card-img-top" alt="IPPT image">
+                    <div class="card-body">
+                    <h5 class="card-title">BMI calculator</h5>
+                    <p class="card-text">Calculate your BMI(Body Mass Index) here based on your height and weight</p>
+                    {% if user.is_authenticated %}
+                    <a href="BMI" class="btn btn-secondary">Access eService</a>
+                    {% else %}
+                    <a href="login" class="btn btn-secondary">Access eService</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+    {% endblock %}

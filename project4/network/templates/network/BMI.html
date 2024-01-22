@@ -1,0 +1,217 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<style>
+    .container {
+        padding: 20px;
+    }
+
+    .card {
+        padding: 20px;
+        width: 80%;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        background-color: #d3d3d3;
+    }
+    
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group-text {
+        width: 40px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .form-control {
+        width: 100%;
+        display: inline-block;
+        
+    }
+    
+   .error {
+        border: 1px solid red;
+   }
+
+   .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: -15px;
+   }
+
+   .error-bg {
+    background-color: red;
+    color: white;
+   }
+
+   .bmi-meter {
+    width: 100%;
+    background-color: #f0f0f0;
+    height: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: flex;
+   }
+
+   .bmi-value {
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    border-radius: 10px;
+    background-color: #007BFF;
+    width: 0;
+    transition: width 0.5s;
+   }
+    
+</style>
+
+
+
+
+<div class="container">
+    <h1><b>Body Mass Index Calculator</b></h1>
+    <h6>Body Mass Index is used to estimate your total amount of fat. It is only an approximate measure of the best weight for your health.</h6>
+    <h6 class="py-3"><strong>What your BMI means</strong></h6>
+    <h8>Once you have measured your BMI you can determine your healthy weight range.</h8>
+    <ul class="py-3">
+        <li>Under 18.5 - you are very underweight and possibly malnourished</li>
+        <li>18.5 to 24.9- you are a healthy weight range for young and middle-aged adults</li>
+        <li>25.0 to 29.9 - you are overweight</li>
+        <li>Over 30 - you are obese</li>
+    </ul>
+
+    <div class="card">
+        <h2 class="py-2">BMI</h2>
+        <h8><b>Height</b></h8>
+        <div class="input-group">
+            <input type="text" class="form-control cm-input" aria-label="Amount (to the nearest dollar)">
+            <span class="input-group-text">cm</span>
+        </div>
+            <div class="error-message" id="cm-error-message"></div>
+        
+        <h8><b>Weight</b></h8>
+        <div class="input-group">
+            <input type="text" class="form-control kg-input" aria-label="Amount (to the nearest dollar)">
+            <span class="input-group-text">kg</span>
+        </div>
+            <div class="error-message" id="kg-error-message"></div>
+            <div class="btn-container py-3">
+                <button type="button" class="btn btn-dark" id="calculate-button" href="#"disabled>Calculate</button>
+            </div>
+
+        <div id="bmi-meter">
+            <div id="bmi-value"></div>
+        </div>
+    </div>
+
+
+<script>
+
+    const cmInput = document.querySelector('.cm-input');
+    const kgInput = document.querySelector('.kg-input');
+    const calculateButton = document.getElementById('calculate-button');
+    
+
+    calculateButton.addEventListener('click', performAnimation);
+
+    updateCalculateButtonState();
+
+    cmInput.addEventListener('input', function() {
+        validateInputRange(cmInput, 100, 300, 'cm');
+        updateCalculateButtonState();
+    })
+    kgInput.addEventListener('input', function() {
+        validateInputRange(kgInput, 25, 300, 'kg');
+        updateCalculateButtonState();
+    })
+
+    function updateCalculateButtonState() {
+        const cmErrorMessage = document.getElementById('cm-error-message').textContent;
+        const kgErrorMessage = document.getElementById('kg-error-message').textContent;
+
+        const shouldEnableButton = cmErrorMessage === '' && kgErrorMessage === '' && cmInput.value !== '' && kgInput.value !== '';
+        calculateButton.disabled = !shouldEnableButton;
+        console.log(`${shouldEnableButton}`)
+    }
+
+
+    function validateInputRange(inputElement, min, max, unit) {
+        const inputValue = parseInt(inputElement.value);
+        const errorMessageElement = document.getElementById(`${unit}-error-message`)
+        const spanElement = inputElement.nextElementSibling;
+        
+        if (isNaN(inputValue) || inputValue < min || inputValue > max) {
+            inputElement.classList.add('error');
+            errorMessageElement.textContent = `Please enter values between ${min} and ${max}.`;
+            spanElement.classList.add('error-bg');
+        } else {
+            inputElement.classList.remove('error');
+            errorMessageElement.textContent = '';
+            spanElement.classList.remove('error-bg');
+        }
+    }
+
+    function performAnimation() {
+        const card = document.querySelector('.card');
+        const calculateButton = document.getElementById('calculate-button');
+        const cmValue = parseFloat(cmInput.value);
+        const kgValue = parseFloat(kgInput.value);
+
+        const bmi = calculateBMI(cmValue, kgValue);
+        const bmiCategory = determineBMICategory(bmi);
+
+        // Update the BMI meter
+        const bmiMeter = document.getElementById('bmi-meter').firstElementChild;
+        bmiMeter.style.width = `${bmi}%`;
+        
+        // Determine the color based on BMI category
+        let bmiColor;
+        if (bmiCategory === 'Underweight') {
+            bmiColor = 'red';
+        } else if (bmiCategory === 'Normal (Healthy Weight)') {
+            bmiColor = 'green';
+        } else if (bmiCategory === 'Overweight') {
+            bmiColor = 'orange';
+        } else {
+            bmiColor = 'red';
+        }
+
+        // Roll up
+        card.style.height = '0';
+        card.style.overflow = 'hidden';
+
+        // After a brief delay, change content and roll down
+        setTimeout(() => {
+            card.innerHTML = `
+                <h2 class="py-2">BMI Results</h2>
+                <p>You BMI result is: ${bmi.toFixed(1)}</p>
+                <p>You are in the category: <b style="color: ${bmiColor}">${bmiCategory}</b></p>
+                
+            `;
+            card.style.height = 'auto';
+
+        }, 500);
+    }
+
+    function determineBMICategory(bmi) {
+        if (bmi < 18.5) {
+            return 'Underweight';
+        } else if (bmi < 25) {
+            return 'Normal (Healthy Weight)';
+        } else if (bmi < 30) {
+            return 'Overweight';
+        } else {
+            return 'Obese';
+        }
+    }
+
+
+
+    function calculateBMI(height, weight) {
+        return weight / ((height / 100) ** 2);
+    }
+
+</script>
+{% endblock %}
