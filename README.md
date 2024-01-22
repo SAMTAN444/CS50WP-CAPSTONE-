@@ -1,4 +1,5 @@
-# CS50WP-CAPSTONE-Hello my name is Samuel, I am an udnergraduate student in Singapore studying computing. With this project CAPSTONE, I believe that I have utilised all of the requirements set for this project, using javascript and django simultaneously.
+# CS50WP-CAPSTONE: 
+Hello my name is Samuel, I am an udnergraduate student in Singapore studying computing. With this project CAPSTONE, I believe that I have utilised all of the requirements set for this project, using javascript and django simultaneously.
 
 DISTINCTIVENESS AND COMPLEXITY:
 I have created a National Service application where users can calculate their IPPT Score, BMI score as well as track their IPPT bookings. Being a Singaporean, it is my duty to serve the mandatory 2 years of national service before i enter university. As such, i have took this opportunity of free time to build this National service website where I believe will help me in my NS days. I gave myself a challenge, to create a javascript function to calculate your IPPT score using sliders.
